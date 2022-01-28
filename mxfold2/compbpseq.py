@@ -1,6 +1,8 @@
-import re
 import math
+import re
+
 import torch
+
 
 def read_bpseq(file):
     with open(file) as f:
@@ -20,6 +22,7 @@ def read_bpseq(file):
     seq = ''.join(s)
     return (seq, p, name, sc, t)
 
+
 def read_pdb(file):
     p = []
     with open(file) as f:
@@ -29,10 +32,11 @@ def read_pdb(file):
                 p.append([int(l[0]), int(l[1])])
     return p
 
+
 def compare_bpseq(ref, pred):
     L = len(ref) - 1
     tp = fp = fn = 0
-    if ((len(ref)>0 and isinstance(ref[0], list)) or (isinstance(ref, torch.Tensor) and ref.ndim==2)):
+    if ((len(ref) > 0 and isinstance(ref[0], list)) or (isinstance(ref, torch.Tensor) and ref.ndim == 2)):
         if isinstance(ref, torch.Tensor):
             ref = ref.tolist()
         ref = {(min(i, j), max(i, j)) for i, j in ref}
@@ -41,9 +45,9 @@ def compare_bpseq(ref, pred):
         fp = len(pred - ref)
         fn = len(ref - pred)
     else:
-        assert(len(ref) == len(pred))
+        assert (len(ref) == len(pred))
         for i, (j1, j2) in enumerate(zip(ref, pred)):
-            if j1 > 0 and i < j1: # pos
+            if j1 > 0 and i < j1:  # pos
                 if j1 == j2:
                     tp += 1
                 elif j2 > 0 and i < j2:
@@ -56,17 +60,21 @@ def compare_bpseq(ref, pred):
     tn = L * (L - 1) // 2 - tp - fp - fn
     return (tp, tn, fp, fn)
 
+
 def accuracy(tp, tn, fp, fn):
-    sen = tp / (tp + fn) if tp+fn > 0. else 0.
-    ppv = tp / (tp + fp) if tp+fp > 0. else 0.
-    fval = 2 * sen * ppv / (sen + ppv) if sen+ppv > 0. else 0.
-    mcc = ((tp*tn)-(fp*fn)) / math.sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn)) if (tp+fp)*(tp+fn)*(tn+fp)*(tn+fn) > 0. else 0.
+    sen = tp / (tp + fn) if tp + fn > 0. else 0.
+    ppv = tp / (tp + fp) if tp + fp > 0. else 0.
+    fval = 2 * sen * ppv / (sen + ppv) if sen + ppv > 0. else 0.
+    mcc = ((tp * tn) - (fp * fn)) / math.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)) if (tp + fp) * (
+                tp + fn) * (tn + fp) * (tn + fn) > 0. else 0.
     return (sen, ppv, fval, mcc)
 
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
-    parser = ArgumentParser(description='calculate SEN, PPV, F, MCC for the predicted RNA secondary structure', add_help=True)
+
+    parser = ArgumentParser(description='calculate SEN, PPV, F, MCC for the predicted RNA secondary structure',
+                            add_help=True)
     parser.add_argument('ref', type=str, help='BPSEQ-formatted file with the refernece structure')
     parser.add_argument('pred', type=str, help='BPSEQ-formatted file with the predicted structure')
     parser.add_argument('--pdb', action='store_true', help='use pdb labels for ref')

@@ -1,4 +1,5 @@
 import math
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -13,12 +14,12 @@ class TransformerLayer(nn.Module):
         self.transformer_encoder = TransformerEncoder(encoder_layers, n_layers, nn.LayerNorm(n_in))
         self.n_in = self.n_out = n_in
 
-    def forward(self, x): # (B, C, N)
-        x = x.permute(2, 0, 1) # (N, B, C)
+    def forward(self, x):  # (B, C, N)
+        x = x.permute(2, 0, 1)  # (N, B, C)
         x = x * math.sqrt(self.n_in)
         x = self.pos_encoder(x)
         x = self.transformer_encoder(x)
-        return x.permute(1, 0, 2) # (B, N, C)
+        return x.permute(1, 0, 2)  # (B, N, C)
 
 
 class PositionalEncoding(nn.Module):
@@ -34,6 +35,6 @@ class PositionalEncoding(nn.Module):
         pe = pe.unsqueeze(0).transpose(0, 1)
         self.register_buffer('pe', pe)
 
-    def forward(self, x): # (N, B, C)
+    def forward(self, x):  # (N, B, C)
         x = x + self.pe[:x.size(0), :]
         return self.dropout(x)

@@ -1,6 +1,7 @@
-from argparse import ArgumentParser
 import torch
+
 from .fold.rnafold import RNAFold
+
 
 class ShowParam:
     def __init__(self):
@@ -20,7 +21,7 @@ class ShowParam:
         subparser = parser.add_parser('show_param', help='show parameters')
         # input
         subparser.add_argument('model', type=str,
-                            help='model file to show parameter')
-        subparser.add_argument('--checkpoint', action='store_true', 
-                            help='show parameters in checkpoint file')
-        subparser.set_defaults(func = lambda args: ShowParam().run(args))
+                               help='model file to show parameter')
+        subparser.add_argument('--checkpoint', action='store_true',
+                               help='show parameters in checkpoint file')
+        subparser.set_defaults(func=lambda args: ShowParam().run(args))

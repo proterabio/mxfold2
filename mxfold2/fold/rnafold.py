@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from .. import interface
 from .fold import AbstractFold
+from .. import interface
 
 
 class RNAFold(AbstractFold):
@@ -41,7 +41,6 @@ class RNAFold(AbstractFold):
                 if n.startswith("score_"):
                     setattr(self, n, nn.Parameter(torch.tensor(getattr(init_param, n))))
 
-
     def make_param(self, seq):
-        param = { n : getattr(self, n) for n in dir(self) if n.startswith("score_") }
-        return [ param for s in seq ]
+        param = {n: getattr(self, n) for n in dir(self) if n.startswith("score_")}
+        return [param for s in seq]

@@ -13,26 +13,26 @@ class OneHotEmbedding(nn.Module):
         self.ksize = ksize
         eye = np.identity(4, dtype=np.float32)
         zero = np.zeros(4, dtype=np.float32)
-        self.onehot = defaultdict(lambda: np.ones(4, dtype=np.float32)/4, 
-                {'a': eye[0], 'c': eye[1], 'g': eye[2], 't': eye[3], 'u': eye[3], 
-                    '0': zero})
+        self.onehot = defaultdict(lambda: np.ones(4, dtype=np.float32) / 4,
+                                  {'a': eye[0], 'c': eye[1], 'g': eye[2], 't': eye[3], 'u': eye[3],
+                                   '0': zero})
 
     def encode(self, seq):
-        seq = [ self.onehot[s] for s in seq.lower() ]
+        seq = [self.onehot[s] for s in seq.lower()]
         seq = np.vstack(seq)
         return seq.transpose()
 
     def pad_all(self, seq, pad_size):
         pad = 'n' * pad_size
-        seq = [ pad + s + pad for s in seq ]
+        seq = [pad + s + pad for s in seq]
         l = max([len(s) for s in seq])
-        seq = [ s + '0' * (l-len(s)) for s in seq ]
+        seq = [s + '0' * (l - len(s)) for s in seq]
         return seq
 
     def forward(self, seq):
-        seq = self.pad_all(seq, self.ksize//2)
-        seq = [ self.encode(s) for s in seq ]
-        return torch.from_numpy(np.stack(seq)) # pylint: disable=no-member
+        seq = self.pad_all(seq, self.ksize // 2)
+        seq = [self.encode(s) for s in seq]
+        return torch.from_numpy(np.stack(seq))  # pylint: disable=no-member
 
 
 class SparseEmbedding(nn.Module):
@@ -41,8 +41,7 @@ class SparseEmbedding(nn.Module):
         self.n_out = dim
         self.embedding = nn.Embedding(6, dim, padding_idx=0)
         self.vocb = defaultdict(lambda: 5,
-            {'0': 0, 'a': 1, 'c': 2, 'g': 3, 't': 4, 'u': 4})
-
+                                {'0': 0, 'a': 1, 'c': 2, 'g': 3, 't': 4, 'u': 4})
 
     def __call__(self, seq):
         seq = torch.LongTensor([[self.vocb[c] for c in s.lower()] for s in seq])

@@ -1,7 +1,9 @@
-from itertools import groupby
-from torch.utils.data import Dataset
-import torch
 import math
+from itertools import groupby
+
+import torch
+from torch.utils.data import Dataset
+
 
 class FastaDataset(Dataset):
     def __init__(self, fasta):
@@ -37,9 +39,9 @@ class BPseqDataset(Dataset):
         with open(bpseq_list) as f:
             for l in f:
                 l = l.rstrip('\n').split()
-                if len(l)==1:
+                if len(l) == 1:
                     self.data.append(self.read(l[0]))
-                elif len(l)==2:
+                elif len(l) == 2:
                     self.data.append(self.read_pdb(l[0], l[1]))
 
     def __len__(self):
@@ -58,7 +60,7 @@ class BPseqDataset(Dataset):
                     l = l.rstrip('\n').split()
                     if len(l) == 3:
                         if not structure_is_known:
-                            raise('invalid format: {}'.format(filename))
+                            raise ('invalid format: {}'.format(filename))
                         idx, c, pair = l
                         pos = 'x.<>|'.find(pair)
                         if pos >= 0:
@@ -71,12 +73,12 @@ class BPseqDataset(Dataset):
                         structure_is_known = False
                         idx, c, nll_unpaired, nll_paired = l
                         s.append(c)
-                        nll_unpaired = math.nan if nll_unpaired=='-' else float(nll_unpaired)
-                        nll_paired = math.nan if nll_paired=='-' else float(nll_paired)
+                        nll_unpaired = math.nan if nll_unpaired == '-' else float(nll_unpaired)
+                        nll_paired = math.nan if nll_paired == '-' else float(nll_paired)
                         p.append([nll_unpaired, nll_paired])
                     else:
-                        raise('invalid format: {}'.format(filename))
-        
+                        raise ('invalid format: {}'.format(filename))
+
         if structure_is_known:
             seq = ''.join(s)
             return (filename, seq, torch.tensor(p))
