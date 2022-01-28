@@ -1,9 +1,9 @@
 import torch
 
-from .fold import AbstractFold
-from .rnafold import RNAFold
-from .zuker import ZukerFold
-from .. import interface
+from fold.fold import AbstractFold
+from fold.rnafold import RNAFold
+from fold.zuker import ZukerFold
+import interface
 
 
 class MixedFold(AbstractFold):

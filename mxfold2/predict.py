@@ -7,11 +7,11 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 
-from .compbpseq import accuracy, compare_bpseq
-from .dataset import BPseqDataset, FastaDataset
-from .fold.mix import MixedFold
-from .fold.rnafold import RNAFold
-from .fold.zuker import ZukerFold
+from compbpseq import accuracy, compare_bpseq
+from dataset import BPseqDataset, FastaDataset
+from fold.mix import MixedFold
+from fold.rnafold import RNAFold
+from fold.zuker import ZukerFold
 
 
 class Predict:

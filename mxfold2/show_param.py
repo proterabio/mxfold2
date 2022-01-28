@@ -1,6 +1,6 @@
 import torch
 
-from .fold.rnafold import RNAFold
+from fold.rnafold import RNAFold
 
 
 class ShowParam:

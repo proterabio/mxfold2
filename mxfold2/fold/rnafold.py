@@ -1,9 +1,8 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
-from .fold import AbstractFold
-from .. import interface
+from fold.fold import AbstractFold
+import interface
 
 
 class RNAFold(AbstractFold):

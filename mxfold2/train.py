@@ -8,11 +8,11 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from .dataset import BPseqDataset
-from .fold.mix import MixedFold
-from .fold.rnafold import RNAFold
-from .fold.zuker import ZukerFold
-from .loss import StructuredLoss, StructuredLossWithTurner
+from dataset import BPseqDataset
+from fold.mix import MixedFold
+from fold.rnafold import RNAFold
+from fold.zuker import ZukerFold
+from loss import StructuredLoss, StructuredLossWithTurner
 
 try:
     from torch.utils.tensorboard import SummaryWriter

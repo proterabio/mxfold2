@@ -1,10 +1,9 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
-from .fold import AbstractFold
-from .layers import LengthLayer, NeuralNet
-from .. import interface
+from fold.fold import AbstractFold
+from fold.layers import LengthLayer, NeuralNet
+import interface
 
 
 class ZukerFold(AbstractFold):
